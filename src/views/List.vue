@@ -12,7 +12,7 @@
         <div class="time">{{item.time}}</div>
         <div class="detail"
              v-show="index === current"
-             @click="showInfo(item)">查看详情>></div>
+             @click="showInfo(item,index)">查看详情>></div>
       </li>
       <li v-show="lists.length == 0"
           :style="{'text-align': 'center'}">
@@ -23,8 +23,10 @@
       </li>
     </ul>
     <Info :obj="chooseOne"
+          :i="chooseIndex"
           @backEvent="()=>{this.isShow = false}"
           v-else></Info>
+    <!-- 传值给子组件 -->
   </div>
 </template>
 
@@ -41,10 +43,12 @@ export default {
     return {
       isShow: false,
       current: '',
-      chooseOne: ''
+      chooseOne: '',
+      chooseIndex: ''
     }
   },
   mounted () {
+
     this.$refs.main.style.maxHeight = window.innerHeight - 60 + 'px'
 
     if (window.localStorage.localLists) {   //判断是否存在
@@ -65,8 +69,10 @@ export default {
     choose (index) {
       this.current = index
     },
-    showInfo (item) {
+    showInfo (item, index) {
+      // console.log(index)
       this.chooseOne = item
+      this.chooseIndex = index
       this.isShow = true
       this.current = ''
     }
@@ -99,6 +105,7 @@ $main-color: #42b983;
     font-weight: bold;
     font-weight: 500;
     line-height: 36px;
+    overflow: hidden;
     border-bottom: 1px solid #dcdcdc;
   }
   .content {
@@ -107,6 +114,8 @@ $main-color: #42b983;
     font-size: 16px;
     line-height: 24px;
     padding: 12px 0 32px 0;
+    text-overflow: ellipsis;
+    overflow: hidden;
   }
   .time {
     margin: 3px;
